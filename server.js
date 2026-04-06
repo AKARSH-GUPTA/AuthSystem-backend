@@ -64,7 +64,7 @@ app.use(
       httpOnly: true,
       secure: true, // true only in HTTPS (it will not allow cookies if it is not set to true in https requests)
       sameSite: "none", // or "none" if cross-site (see below) ("lax" is used for the localhost) ("strictonly" for same domain)
-      domain:'.onrender.com',
+      // domain:'.onrender.com',
       maxAge: 1000 * 60 * 60 * 24,
     },
   }),
