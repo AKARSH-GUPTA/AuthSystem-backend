@@ -31,7 +31,7 @@ app.set("trust proxy", 1);//for the render (secure cookies won't work without it
 //setting cors for cross site cookies handling
 app.use(
   cors({
-    origin: "https://authentication-system-eight-tau.vercel.app", // your React app URL
+    origin: process.env.CLIENT_URL, // your React app URL
     credentials: true,
   }),
 );
