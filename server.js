@@ -4,18 +4,31 @@ dotenv.config(); // Loads variables from .env into process.env
 import express from "express";
 import session from "express-session";
 import passport from "passport";
+import {Strategy} from "passport-local";
+import GoogleStrategy from "passport-google-oauth2";
 import cors from "cors";
-import pool from "./extra/databaseconnection.js";
+import pool from "./config/databaseconnection.js";
 import connectPgSimple from "connect-pg-simple";
 import userRoutes from "./routes/user-routes.js";
+import strategies from "./config/Strategies.js"
 const pgSession = connectPgSimple(session);
 
+
 const app = express();
+
+//ERROR handling middileware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
 
 // Use environment variables for configuration
 const PORT = process.env.PORT || 3000;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 
+app.set("trust proxy", 1);//for the render (secure cookies won't work without it)
+
+//setting cors for cross site cookies handling
 app.use(
   cors({
     origin: CLIENT_URL, // your React app URL
@@ -37,8 +50,8 @@ app.use(
     saveUninitialized: false, // important (we don't want to save the empty sessiom until it contain any data)
     cookie: {
       httpOnly: true,
-      secure: false, // true only in HTTPS (it will not allow cookies if it is not set to true in https requests)
-      sameSite: "lax", // or "none" if cross-site (see below) ("lax" is used for the localhost) ("strictonly" for same domain)
+      secure: true, // true only in HTTPS (it will not allow cookies if it is not set to true in https requests)
+      sameSite: "none", // or "none" if cross-site (see below) ("lax" is used for the localhost) ("strictonly" for same domain)
       maxAge: 1000 * 60 * 60 * 24,
     },
   }),
@@ -46,6 +59,26 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//strategies for the passport
+passport.use(
+  new Strategy(
+    { usernameField: "email", passwordField: "password" },
+     strategies.Local
+  ),
+);
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    },
+    strategies.Google
+  ),
+);
 
 //set the user to the session and sends the cookie
 passport.serializeUser((user, cb) => {

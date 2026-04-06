@@ -1,4 +1,4 @@
-import pool from "../extra/databaseconnection.js";
+import pool from "../config/databaseconnection.js";
 import passport from "passport";
 
 function checkAuthentication(req, res) {

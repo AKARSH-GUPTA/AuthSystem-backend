@@ -1,7 +1,10 @@
 import {Pool} from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const pool =  new Pool({
-    connectionString: "postgresql://postgres:krishnagupta1300@db.ghmrdofusfwlwftaepgn.supabase.co:5432/postgres",
+    connectionString: process.env.DB_CONNECTION_STRING,
 
   // REQUIRED for Supabase (SSL)
   ssl: {

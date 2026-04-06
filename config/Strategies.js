@@ -1,6 +1,5 @@
 import pool from "./databaseconnection.js";
 
-
 async function Local(username, password, cb) {
   try {
     const result = await pool.query(
@@ -25,7 +24,6 @@ async function Local(username, password, cb) {
 }
 
 async function Google(accessToken, refreshToken, profile, cb) {
-  console.log(profile);
   try {
     const result = await pool.query(
       "SELECT * FROM public.user WHERE email=$1",
