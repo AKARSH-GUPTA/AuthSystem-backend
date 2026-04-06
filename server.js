@@ -29,25 +29,25 @@ const PORT = process.env.PORT || 3000;
 app.set("trust proxy", 1);//for the render (secure cookies won't work without it)
 
 //setting cors for cross site cookies handling
-// app.use(
-//   cors({
-//     origin: CLIENT_URL, // your React app URL
-//     credentials: true,
-//   }),
-// );
-app.use(cors({
-  origin: function (origin, callback) {
-    if (
-      !origin ||
-      origin.includes("vercel.app")
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "https://authentication-system-eight-tau.vercel.app", // your React app URL
+    credentials: true,
+  }),
+);
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (
+//       !origin ||
+//       origin.includes("vercel.app")
+//     ) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true
+// }));
 app.use(express.json()); //important fro recieving the json data through the axios requests
 app.use(express.urlencoded({ extended: true }));
 
