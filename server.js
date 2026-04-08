@@ -24,14 +24,14 @@ app.use((err, req, res, next) => {
 
 // Use environment variables for configuration
 const PORT = process.env.PORT || 3000;
-// const CLIENT_URL = process.env.CLIENT_URL || "https://authentication-system-eight-tau.vercel.app";
+const CLIENT_URL = process.env.CLIENT_URL || "https://authsystem-frontend-qmh0.onrender.com";
 
 app.set("trust proxy", 1);//for the render (secure cookies won't work without it)
 
 //setting cors for cross site cookies handling
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // your React app URL
+    origin: "https://authsystem-frontend-qmh0.onrender.com", // your React app URL
     credentials: true,
   }),
 );
